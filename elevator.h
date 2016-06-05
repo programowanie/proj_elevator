@@ -1,47 +1,35 @@
 #pragma once
 
 #include <iostream>
-#include <cmath>
+#include <cstdlib>
 #include <vector>
-#include <list>
-
 using namespace std;
 
 class elevator
 {
 private:
-	int height=0;
-	int speed=0;
-	const int max_speed=10;
-
-	int time=0;
-
-	int floor_number;
-	vector<bool> floor_button;
-	list<int> orders_list;
-
-	int floor_by_height=100;
-	int floor_by_height_function(int floor) 
+	int _floors; //liczba pieter
+	int _stop_time; //czas postoju na pietrze
+	int _travel_time; //czas podrozy miedzy jednym a drugim pietrem (wartosc zmyslona)
+	int _max_load; //max osob w windzie
+	int load=0; //parametr liczacy osoby w windzie
+	int time=0; //parametr czasu podrozy
+	int passenger=0 + rand() % 2;
+	int is_passenger()
 	{
-		return floor_by_height*floor;
+		return passenger;
 	}
-
-	bool door_open=false;
-	bool is_door_open()
-	{
-		return door_open;
-	}
-
-	void speed_control();
-	void open_door();
-	void close_door();
-
+	int all_passenger=0;
+	bool in_elevator=false;
 public:
+	vector <int> human;
+	elevator();
+	int floors() {return _floors;}
+	int stop_time() {return _stop_time;}
+	int travel_time() {return _travel_time;}
+	int max_load() {return _max_load;}
 	
 	void update();
-	elevator(int floor_number);
-	void push_back_order(int height);
-	void push_button(int floor);
-
+	void result();
 
 };
