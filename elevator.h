@@ -37,7 +37,7 @@ private:
 	void close_door();
 
 public:
-	elevator();
+	
 	void update();
 	elevator(int floor_number);
 	void push_back_order(int height);
