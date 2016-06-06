@@ -16,10 +16,22 @@ elevator::elevator()
 
 void elevator::update()
 {
+	int passenger_in=0;
+	int passenger_out=0;
+	int passenger_in_elev=0;
+	srand(time(NULL));
 	int y;
 		for(int i=0;i<_floors;i++)
 		{
-			time+=_travel_time;
+			if(i==0)
+			{
+				cout << "Parter"<< endl;	
+			}
+			else
+			{
+				cout << i << ". Pietro"<< endl;
+			}
+			
 			if(is_passenger()==1)
 			{	
 				if(in_elevator)
@@ -29,31 +41,50 @@ void elevator::update()
 						if (human[k]==i)
 						{
 							human.erase(human.begin()+k-1); 
-							load--;
+							passenger_out++;
+						}
+						load=load-passenger_out;
+						if (load==0)
+						{
+							in_elevator==false;
+							continue;
 						}
 					}
+					cout << "Wysiadlo " << passenger_out << " pasazerow." << endl;
 				}
-				int x=rand() % 4;
-				if(load<_max_load && (load+x)<=_max_load)
+				passenger_in=rand() % 7;
+				if(load<_max_load && (load+passenger_in)<=_max_load)
 				{
 					do
 					{
-						y=rand() % 5;
+						y=rand() % _floors;
 					}while(y!=i);
 					human.push_back(y);
-					load+=x;
-					all_passenger=load;
+					load+=passenger_in;
+					all_passenger+=load;
 					in_elevator=true;
 				}
-
-				time+=_stop_time;
-				
+				cout << "Wsiadlo " << passenger_in << " pasazerow." << endl;
+				cout << "Pasazerow w windzie: " << load << endl;
+				time_simulation+=_stop_time;
+				passenger_in=0;
 			}
-				cout << i << ". pietro, " << load << " pasazerow w windzie. Czas podrozy: " << time << endl;
+			time_simulation+=_travel_time;
+				cout << "Czas podrozy: " << time_simulation << endl;
+				cout << endl;
 		}
-		for(int i=_floors-1;i>0;i--)
+		passenger_in_elev=load;
+		for(int i=_floors-2;i>0;i--)
 		{
-			time+=_travel_time;
+			if(i==0)
+			{
+				cout << "Parter"<< endl;	
+			}
+			else
+			{
+				cout << i << ". Pietro"<< endl;
+			}
+			
 			if(is_passenger()==1)
 			{	
 				if(in_elevator)
@@ -63,33 +94,45 @@ void elevator::update()
 						if (human[k]==i)
 						{
 							human.erase(human.begin()+k-1); 
-							load--;
+							passenger_out++;
+						}
+						passenger_in_elev=passenger_in_elev-passenger_out;
+						if (passenger_in_elev==0)
+						{
+							in_elevator==false;
+							continue;
 						}
 					}
+					cout << "Wysiadlo " << passenger_out << " pasazerow." << endl;
 				}
-				int x=rand() % 4;
-				if(load<_max_load && (load+x)<=_max_load)
+				passenger_in=rand() % 7;
+				if(passenger_in_elev<_max_load && (passenger_in_elev+passenger_in)<=_max_load)
 				{
 					do
 					{
-						y=rand() % 5;
+						y=rand() % _floors;
 					}while(y!=i);
 					human.push_back(y);
-					load+=x;
-					all_passenger=load;
+					passenger_in_elev+=passenger_in;
+					all_passenger+=passenger_in_elev;
 					in_elevator=true;
 				}
-
-				time+=_stop_time;
+				cout << "Wsiadlo " << passenger_in << " pasazerow." << endl;
+				cout << "Pasazerow w windzie: " << passenger_in_elev << endl;
+				time_simulation+=_stop_time;
+				passenger_in=0;
 				
 			}
-				cout << i << ". pietro, " << load << " pasazerow w windzie. Czas podrozy: " << time << endl;
+			time_simulation+=_travel_time;
+				cout << "Czas podrozy: " << time_simulation << endl;
+				cout << endl;
 		}
+		load=passenger_in_elev;
 
 
 }
 
 void elevator::result()
 {
-	cout << "Przewieziono " << all_passenger << " w czasie: " << time << endl;
+	cout << "Przewieziono " << all_passenger << " w czasie: " << time_simulation << endl;
 }

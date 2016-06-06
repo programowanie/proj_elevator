@@ -1,5 +1,3 @@
-#pragma once
-
 #include <iostream>
 #include <cstdlib>
 #include <vector>
@@ -13,7 +11,7 @@ private:
 	int _travel_time; //czas podrozy miedzy jednym a drugim pietrem (wartosc zmyslona)
 	int _max_load; //max osob w windzie
 	int load=0; //parametr liczacy osoby w windzie
-	int time=0; //parametr czasu podrozy
+	int time_simulation=-8; //parametr czasu podrozy
 	int passenger=0 + rand() % 2;
 	int is_passenger()
 	{
