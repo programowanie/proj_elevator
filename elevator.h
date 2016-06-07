@@ -1,6 +1,6 @@
 #include <iostream>
 #include <cstdlib>
-#include <vector>
+#include <list>
 using namespace std;
 
 class elevator
@@ -12,15 +12,16 @@ private:
 	int e_max_load; //max osob w windzie
 	int load=0; //parametr liczacy osoby w windzie
 	int time_simulation=-8; //parametr czasu podrozy
-	int passenger=0 + rand() % 2;
+	int temp=0;
+	/*int passenger=0 + rand() % 2;
 	int is_passenger()
-	{
+	{									// warunek logiczny na int odnośnie sprawdzania czy na pietrze byli pasazerowie (usuniety po ver alpha)
 		return passenger;
-	}
+	}*/
 	int all_passenger=0;
 	bool in_elevator=false;
 public:
-	vector <int> human;
+	list <int> human;
 	elevator();
 	int floors() {return e_floors;}
 	int stop_time() {return e_stop_time;}

@@ -18,10 +18,6 @@ elevator::elevator()
 
 void elevator::update()
 {
-	int passenger_in=0;
-	int passenger_out=0;
-	int passenger_in_elev=0;
-	int y;
 		for(int i=0;i<e_floors;i++) //winda do gory
 		{
 			if(i==0)
@@ -33,113 +29,98 @@ void elevator::update()
 				cout << i << ". Pietro"<< endl;
 			}
 			
-			if(is_passenger()==1)
-			{	
-				if(in_elevator)
-				{
-					for (int k=human.size()-1;k>=0;k--)
-					{
-						if (human[k]==i)
-						{
-							human.erase(human.begin()+k-1); 
-							passenger_out++;
-						}
-						load=load-passenger_out;
-						passenger_in_elev=load;
-						if (load==0)
-						{
-							in_elevator==false;
-							continue;
-						}
-					}
-					cout << "Wysiadlo " << passenger_out << " pasazerow." << endl;
-				}
-				passenger_in=rand() % 7;
-				if(load<e_max_load && (load+passenger_in)<=e_max_load)
-				{
-					do
-					{
-						y=rand() % 5;
-					}while(y!=i);
-					human.push_back(y);
-					load+=passenger_in;
-					passenger_in_elev=load;
-					all_passenger+=passenger_in;
-					in_elevator=true;
-				}
-				cout << "Wsiadlo " << passenger_in << " pasazerow." << endl;
-				cout << "Pasazerow w windzie: " << load << endl;
-				if(passenger_in!=0 || passenger_out!=0)
+			load=human.size(); // ilosc osob w windzie
+			human.remove(i); // usuwamy te osoby ktore chcialy wysiasc na tym pietrze
+			int people_out = load-human.size();  //ile wysiadlo osob
+			load=human.size();  // ile zostalo
+			all_passenger+=people_out;
+
+			//wsiadanie do windy
+
+			int people_want_in = rand()%7; //losujemy ile osob czeka na danym pietrze
+			int people_in = ((max_load()-load) >= people_want_in) ? people_want_in : (max_load()-load);
+			//ile osob tak naprawde wejdzie
+			load+=people_in;
+
+			for (int j=0; j<people_in; j++)
+			{
+				int want_floor=rand()%e_floors-1;
+				human.push_back(want_floor>=i?(want_floor+1):want_floor); //przypisuje chciane piętro
+			}
+
+			if(people_in!=0 || people_out!=0)
 				{
 					time_simulation+=e_stop_time;
 				}
-				passenger_out=0;
-				passenger_in=0;
-			}
-			time_simulation+=e_travel_time;
-				cout << "Czas podrozy: " << time_simulation << endl;
-				cout << endl;
+				time_simulation+=e_travel_time;
+
+			if(i==0)
+				{
+					load-=temp;
+					cout << " Wsiadlo: " << people_in << "\n Ludzi w windzie: " << load << endl;
+					cout << " Czas podrozy: " << time_simulation << endl;
+				}
+				else
+				{
+					cout << " Wsiadlo: " << people_in << "\n Wysiadlo: " << people_out << "\n Ludzi w windzie: " << load << endl;
+					cout << " Czas podrozy: " << time_simulation << endl;
+				}	
+			
+			
 		}
-		load=passenger_in_elev;
-		for(int i=e_floors-2;i>0;i--) // winda w dol
+
+
+			for(int i=e_floors-2;i>=0;i--) //winda w dol
 		{
 			if(i==0)
 			{
 				cout << "Parter"<< endl;	
-			}
+			}	
 			else
 			{
 				cout << i << ". Pietro"<< endl;
 			}
 			
-			if(is_passenger()==1)
-			{	
-				if(in_elevator)
-				{
-					for (int k=human.size()-1;k>=0;k--)
-					{
-						if (human[k]==i)
-						{
-							human.erase(human.begin()+k-1); 
-							passenger_out++;
-						}
-						load=load-passenger_out;
-						if (load==0)
-						{
-							in_elevator==false;
-							continue;
-						}
-					}
-					cout << "Wysiadlo " << passenger_out << " pasazerow." << endl;
-				}
-				passenger_in=rand() % 7;
-				if(load<e_max_load && (load+passenger_in)<=e_max_load)
-				{
-					do
-					{
-						y=rand() % e_floors;
-					}while(y!=i);
-					human.push_back(y);
-					load+=passenger_in;
-					all_passenger+=passenger_in;
-					in_elevator=true;
-				}
-				cout << "Wsiadlo " << passenger_in << " pasazerow." << endl;
-				cout << "Pasazerow w windzie: " << load << endl;
-				if(passenger_in!=0 || passenger_out!=0)
+			load=human.size(); // ilosc osob w windzie
+			human.remove(i); // usuwamy te osoby ktore chcialy wysiasc na tym pietrze
+			int people_out = load-human.size();  //ile wysiadlo osob
+			load=human.size();  // ile zostalo
+			all_passenger+=people_out;	
+
+			//wsiadanie do windy
+
+			int people_want_in = rand()%7; //losujemy ile osob czeka na danym pietrze
+			int people_in = ((max_load()-load) >= people_want_in) ? people_want_in : (max_load()-load);
+			//ile osob tak naprawde wejdzie
+			load+=people_in;
+
+			for (int j=0; j<people_in; j++)
+			{
+				int want_floor=rand()%e_floors-1;
+				human.push_back(want_floor>=i?(want_floor+1):want_floor); //przypisuje chciane piętro
+			}
+
+			if(people_in!=0 || people_out!=0)
 				{
 					time_simulation+=e_stop_time;
 				}
-				passenger_out=0;
-				passenger_in=0;
-				
-			}
-			time_simulation+=e_travel_time;
-				cout << "Czas podrozy: " << time_simulation << endl;
-				cout << endl;
+				time_simulation+=e_travel_time;
+				if(i==0)
+				{
+					temp=people_in;
+					load-=temp;
+					people_in=0;
+					cout << " Wysiadlo: " << people_out << "\n Ludzi w windzie: " << load << endl;
+					cout << " Czas podrozy: " << time_simulation << endl;
+				}
+				else
+				{
+					cout << " Wsiadlo: " << people_in << "\n Wysiadlo: " << people_out << "\n Ludzi w windzie: " << load << endl;
+					cout << " Czas podrozy: " << time_simulation << endl;
+				}				
+			
+		
 		}
-		load=passenger_in_elev;
-
 
 }
 
